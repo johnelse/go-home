@@ -6,4 +6,4 @@ obuild-ver: 1
 executable go-home
   src-dir: src
   main: go_home.ml
-  build-deps: sqlite3
+  build-deps: unix, sqlite3
