@@ -1,0 +1,9 @@
+name: go-home
+version: 0.1.0
+synopsis: Program to track when I get home
+obuild-ver: 1
+
+executable go-home
+  src-dir: src
+  main: go_home.ml
+  build-deps: sqlite3
