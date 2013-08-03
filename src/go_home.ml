@@ -1,6 +1,12 @@
 let relative_db_dir = ".config/go-home"
 let db_filename = "go-home.db"
 
+exception Bad_return_code of Sqlite3.Rc.t
+
+let expect_ok = function
+  | Sqlite3.Rc.OK -> ()
+  | x -> raise (Bad_return_code x)
+
 let ensure_dir_exists dir =
   if Sys.file_exists dir then begin
     if not (Sys.is_directory dir)
@@ -18,8 +24,12 @@ let with_db f =
   ensure_dir_exists db_dir;
   (* Open the database. *)
   let db_path = Filename.concat db_dir db_filename in
+  let db_exists = Sys.file_exists db_path in
   let db = Sqlite3.db_open db_path in
   try
+    if not db_exists
+    then expect_ok (Sqlite3.exec db
+      "create table observations (year int, month int, day int, hour int, minute int)");
     let result = f db in
     ignore (Sqlite3.db_close db);
     result
