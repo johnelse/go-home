@@ -13,7 +13,7 @@ module Db = struct
 
   let expect_ok = function
     | Sqlite3.Rc.OK -> ()
-    | x -> raise (Bad_return_code x)
+    | code -> raise (Bad_return_code code)
 
 let with_db db_path f =
   (* Open the database. *)
