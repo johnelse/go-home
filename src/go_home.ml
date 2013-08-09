@@ -8,6 +8,28 @@ let ensure_dir_exists dir =
   end
   else Unix.mkdir dir 0o755
 
+type action =
+  | Register
+  | Score
+
+let get_action () =
+  let action = ref Register in
+  Arg.parse
+    [(
+      "-action",
+      Arg.String
+        (fun value ->
+          action :=
+            match String.lowercase value with
+            | "register" -> Register
+            | "score" -> Score
+            | _ -> failwith "Unknown action"),
+      "The action to perform - either register or score"
+    )]
+    (fun _ -> ())
+    "Usage: go-home -action <action>";
+  !action
+
 let () =
   let home_dir =
     try Sys.getenv "HOME"
