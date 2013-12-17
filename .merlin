@@ -1,0 +1,4 @@
+PKG unix sqlite3
+S src
+
+B dist/build/go-home
